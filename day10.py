@@ -4,11 +4,12 @@ def check_importance(cycle_num):
     return False
 
 
-def solve_part_1(commands):
+def solve_puzzle(commands):
     cycle_counter = 0
     register_value = 1
     important_values = []
 
+    print("Answer to part 2:")
     for line in commands:
         if "addx" in line:
             for cycle in range(1, 3):
@@ -16,17 +17,20 @@ def solve_part_1(commands):
                     cycle_counter += 1
                     if check_importance(cycle_counter):
                         important_values.append(register_value * cycle_counter)
+                    print_pixel(cycle_counter, register_value)
                 else:
                     cycle_counter += 1
                     if check_importance(cycle_counter):
                         important_values.append(register_value * cycle_counter)
+                    print_pixel(cycle_counter, register_value)
                     register_value += int(line.split(' ')[1])
         else:
             cycle_counter += 1
             if check_importance(cycle_counter):
                 important_values.append(register_value * cycle_counter)
+            print_pixel(cycle_counter, register_value)
 
-    print("Answer to part 1:", sum(value for value in important_values))
+    print("\n\nAnswer to part 1:", sum(value for value in important_values))
 
 
 def print_pixel(cycle_num, reg_value):
@@ -41,30 +45,8 @@ def print_pixel(cycle_num, reg_value):
         print('.', end=" ")
 
 
-def solve_part_2(commands):
-    cycle_counter = 0
-    register_value = 1
-
-    print("Answer to part 2:")
-    for line in commands:
-        if "addx" in line:
-            for cycle in range(1, 3):
-                if cycle == 1:
-                    cycle_counter += 1
-                    print_pixel(cycle_counter, register_value)
-                else:
-                    cycle_counter += 1
-                    print_pixel(cycle_counter, register_value)
-                    register_value += int(line.split(' ')[1])
-        else:
-            cycle_counter += 1
-            print_pixel(cycle_counter, register_value)
-
-
-
 if "__main__" == __name__:
     with open("day10_input.txt") as file:
         data = [i for i in file.read().strip().split('\n')]
-    solve_part_1(data)
-    solve_part_2(data)
+    solve_puzzle(data)
 
