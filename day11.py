@@ -42,8 +42,7 @@ def get_monkeys_and_conditions(data):
     return mon_list
 
 
-def inspect(init_worry, monkey, monkeys, large_num):
-    crt = reduce(lambda acc, monk: acc*monk.test, monkeys, 1)
+def inspect(init_worry, monkey, crt):
     second_num = monkey.operation.split(' ')[1]
     if 'old' in second_num:
         second_num = init_worry
@@ -52,7 +51,7 @@ def inspect(init_worry, monkey, monkeys, large_num):
         new_worry_level = init_worry + second_num
     else:
         new_worry_level = init_worry * second_num
-    if large_num:
+    if crt:
         return new_worry_level % crt
     return int(new_worry_level / 3)
 
@@ -69,9 +68,14 @@ def throw_item(src_monkey, target_monkey):
 
 
 def monkey_business(all_monkeys, large_num):
+    # crt refers to Chinese Remainder Theorem, which allows us to simplify calculations involving large numbers
+    if large_num:
+        crt = reduce(lambda acc, monk: acc * monk.test, all_monkeys, 1)
+    else:
+        crt = None
     for monkey in all_monkeys:
         for index in range(len(monkey.items)):
-            monkey.items[0] = inspect(monkey.items[0], monkey, all_monkeys, large_num)
+            monkey.items[0] = inspect(monkey.items[0], monkey, crt)
             target = choose_target(monkey.items[0], monkey.test, monkey.action)
             throw_item(monkey, all_monkeys[target])
 
